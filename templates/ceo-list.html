@@ -1,0 +1,9 @@
+${head}
+<h1>Apple CEO's</h1>
+<ul>
+  ${ceos.map((ceo) => {
+  return(`
+  <li><a href="/ceos/${ceo.name}">${ceo.name}</a> </li>
+  `)
+  }).join('')}
+</ul> ${foot}
