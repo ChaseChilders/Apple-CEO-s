@@ -38,6 +38,20 @@ app.get("/ceos", (req, res) => {
   });
 });
 
+app.get("/ceos/:slug", (req, res) => {
+  const ceo = data.ceos.find((ceo) => ceo.slug === req.params.slug);
+  if (!ceo) {
+    res.status(404).send("Could not find that CEO");
+  }
+  res.render("ceo.details", {
+    partials,
+    locals: {
+      ceo,
+      title: `${ceo.name}'s Profile`,
+    },
+  });
+});
+
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
