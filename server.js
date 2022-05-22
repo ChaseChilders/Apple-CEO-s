@@ -43,7 +43,19 @@ app.get("/ceos/:slug", (req, res) => {
   if (!ceo) {
     res.status(404).send("Could not find that CEO");
   }
-  res.render("ceo.details", {
+  res.render("ceo-details", {
+    partials,
+    locals: {
+      ceo,
+      title: `${ceo.name}'s Profile`,
+    },
+  });
+});
+
+app.get("/ceos/search", (req, res) => {
+  const ceoName = req.query;
+  const ceo = ceos.find(`${text}: ${search}: ${ceoName}`);
+  res.render("ceo-details", {
     partials,
     locals: {
       ceo,
