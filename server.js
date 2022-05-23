@@ -5,9 +5,13 @@ const data = require("./data");
 
 const hostname = "localhost";
 const port = 3001;
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.engine("html", es6Renderer);
 app.set("views", "templates");
@@ -53,8 +57,10 @@ app.get("/ceos/:slug", (req, res) => {
 });
 
 app.get("/ceos/search", (req, res) => {
-  const ceoName = req.query;
-  const ceo = ceos.find(`${text}: ${search}: ${ceoName}`);
+  const ceo = data.ceos.find((ceo) => ceo.name === req.params.slug);
+  if (!ceo) {
+    res.status(404).send("Could not find that CEO");
+  }
   res.render("ceo-details", {
     partials,
     locals: {
@@ -62,6 +68,11 @@ app.get("/ceos/search", (req, res) => {
       title: `${ceo.name}'s Profile`,
     },
   });
+});
+
+app.post("/search", (req, res) => {
+  let name = req.body.name;
+  res.send(`You sent me the ${name} `);
 });
 
 server.listen(port, hostname, () => {
